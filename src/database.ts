@@ -1,1 +1,3 @@
-export const internalData: Array<any> = [];
+import { IOrderList } from './interfaces';
+
+export const internalData: Array<IOrderList> = [];
