@@ -1,1 +1,1 @@
-export const data: Array<any> = [];
+export const internalData: Array<any> = [];
