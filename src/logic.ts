@@ -32,11 +32,22 @@ export const deleteListItem = (req: Request, res: Response): Response => {
         return res.status(404).json({ message: `List with id '${req.params.listId}' does not exist` });
     }
 
-    const foundIndex = listFound.data.findIndex(product => product.name === req.params.itemName);
+    const foundIndex: number = listFound.data.findIndex(product => product.name === req.params.itemName);
     if (foundIndex === -1) {
         return res.status(404).json({ message: `Item with name '${req.params.itemName}' does not exist` });
     }
     listFound.data.splice(foundIndex, 1);
+
+    return res.status(204).json();
+};
+
+export const deleteList = (req: Request, res: Response): Response => {
+    const foundIndex: number = internalData.findIndex(list => list.id === +req.params.listId);
+
+    if (foundIndex === -1) {
+        return res.status(404).json({ message: `List with id '${req.params.listId}' does not exist` });
+    }
+    internalData.splice(foundIndex, 1);
 
     return res.status(204).json();
 };
