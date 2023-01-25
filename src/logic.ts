@@ -23,6 +23,11 @@ export const getList = (req: Request, res: Response): Response => {
 
 export const getListById = (req: Request, res: Response): Response => {
     const orderFound: IOrderList | undefined = internalData.find(elem => elem.id === +req.params.id);
+
+    if (!orderFound) {
+        return res.status(404).json({ message: `List with id '${req.params.id}' does not exist` });
+    }
+
     return res.status(200).json(orderFound);
 };
 
