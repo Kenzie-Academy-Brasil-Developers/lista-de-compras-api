@@ -20,3 +20,8 @@ export const createList = (req: Request, res: Response): Response => {
 export const getList = (req: Request, res: Response): Response => {
     return res.json(internalData);
 };
+
+export const getListById = (req: Request, res: Response): Response => {
+    const orderFound: IOrderList | undefined = internalData.find(elem => elem.id === +req.params.id);
+    return res.status(200).json(orderFound);
+};
