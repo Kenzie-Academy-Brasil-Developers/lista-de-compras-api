@@ -25,3 +25,18 @@ export const getListById = (req: Request, res: Response): Response => {
     const orderFound: IOrderList | undefined = internalData.find(elem => elem.id === +req.params.id);
     return res.status(200).json(orderFound);
 };
+
+export const deleteListItem = (req: Request, res: Response): Response => {
+    const listFound: IOrderList | undefined = internalData.find(elem => elem.id === +req.params.listId);
+    if (!listFound) {
+        return res.status(404).json({ message: `List with id '${req.params.listId}' does not exist` });
+    }
+
+    const foundIndex = listFound.data.findIndex(product => product.name === req.params.itemName);
+    if (foundIndex === -1) {
+        return res.status(404).json({ message: `Item with name '${req.params.itemName}' does not exist` });
+    }
+    listFound.data.splice(foundIndex, 1);
+
+    return res.status(204).json();
+};
