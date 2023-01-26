@@ -3,8 +3,29 @@ import { Request, Response } from 'express';
 import { internalData } from './database';
 import { IOrderList, IOrderListRequest } from './interfaces';
 
+const validateDataOrder = (payload: any): IOrderListRequest => {
+    const requiredMainKeys: Array<string> = ['listName', 'data'];
+    const requiredSubKeys: Array<string> = ['name', 'quantity'];
+    const mainKeys: Array<string> = Object.keys(payload);
+    const subKeys: Array<string> = [];
+
+    payload.data.forEach((product: Object) => subKeys.push(...Object.keys(product)));
+
+    const containsMainRequired: boolean = mainKeys.every((key: string) => requiredMainKeys.includes(key));
+    if (!containsMainRequired) {
+        throw new Error(`Updatable fields are: 'listName' and 'data'`);
+    }
+
+    const containsSubRequired: boolean = subKeys.every((key: string) => requiredSubKeys.includes(key));
+    if (!containsSubRequired) {
+        throw new Error(`Updatable fields are: 'name' and 'quantity'`)
+    }
+
+    return payload;
+};
+
 export const createList = (req: Request, res: Response): Response => {
-    const orderData: IOrderListRequest = req.body;
+    const orderData: IOrderListRequest = validateDataOrder(req.body);
     const id: number = Math.floor(Math.random() * 1000);
 
     const newOrderData: IOrderList = {
