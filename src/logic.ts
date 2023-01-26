@@ -116,7 +116,11 @@ export const updateListItem = (req: Request, res: Response) => {
     try {
         const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
         if (!listFound) {
-            return res.status(400).json({message: `List with id '${req.params.listId}' does not exist`})
+            return res.status(400).json({ message: `List with id '${req.params.listId}' does not exist` });
+        }
+
+        if (typeof req.body.name !== 'string' || typeof req.body.quantity !== 'string') {
+            return res.status(200).json({ message: 'The list name need to be a string' });
         }
 
         validateUpdateOrder(req.body);
