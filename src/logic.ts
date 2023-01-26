@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { internalData } from './database';
 import { IOrderList, IOrderListRequest } from './interfaces';
@@ -67,6 +67,11 @@ export const createList = (req: Request, res: Response): Response => {
     }
 };
 
+export const saveLastCreatedList = (req: Request, res: Response, next: NextFunction): Response | void => {
+    req.lastList = internalData[internalData.length - 1] || {};
+    return next();
+};
+
 export const getList = (req: Request, res: Response): Response => {
     return res.json(internalData);
 };
@@ -132,10 +137,10 @@ export const updateListItem = (req: Request, res: Response): Response | void => 
                 return res.status(200).json({ message: 'The list name need to be a string' });
             }
         }
-        
+
         if (!!listFound) {
             const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
-            
+
             if (!!itemFound) {
                 validateUpdateOrder(req.body);
                 itemFound.name = req.body.name;
