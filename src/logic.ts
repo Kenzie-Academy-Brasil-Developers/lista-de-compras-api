@@ -9,6 +9,10 @@ const validateDataOrder = (payload: any): IOrderListRequest => {
     const mainKeys: Array<string> = Object.keys(payload);
     const subKeys: Array<string> = [];
 
+    if (mainKeys.length !== 2) {
+        throw new Error(`Updatable fields are: 'listName' and 'data'`);
+    }
+
     const containsMainRequired: boolean = mainKeys.every((key: string) => requiredMainKeys.includes(key));
     if (!containsMainRequired) {
         throw new Error(`Updatable fields are: 'listName' and 'data'`);
@@ -99,12 +103,12 @@ const validateUpdateOrder = (payload: any) => {
     const requiredKeys: Array<string> = ['name', 'quantity'];
     const keys: Array<string> = Object.keys(payload);
     if (keys.length !== 2) {
-        throw new Error(`Updatable fields are: 'name' and 'quantity`);
+        throw new Error(`Updatable fields are: 'name' and 'quantity'`);
     }
 
     const containsKeysRequired: boolean = keys.every((key: string) => requiredKeys.includes(key));
     if (!containsKeysRequired) {
-        throw new Error(`Updatable fields are: 'name' and 'quantity`);
+        throw new Error(`Updatable fields are: 'name' and 'quantity'`);
     }
 };
 
