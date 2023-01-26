@@ -94,3 +94,19 @@ export const deleteList = (req: Request, res: Response): Response => {
 
     return res.status(204).json();
 };
+
+export const updateListItem = (req: Request, res: Response): Response => {
+    const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
+
+    if (!!listFound) {
+        const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
+
+        if (!!itemFound) {
+            itemFound.name = req.body.name;
+            itemFound.quantity = req.body.quantity;
+            return res.status(200).json(itemFound);
+        }
+    }
+
+    return res.status(404).json({ message: `Item with name '${req.params.itemName}' does not exist` });
+};
