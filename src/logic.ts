@@ -98,6 +98,9 @@ export const deleteList = (req: Request, res: Response): Response => {
 const validateUpdateOrder = (payload: any) => {
     const requiredKeys: Array<string> = ['name', 'quantity'];
     const keys: Array<string> = Object.keys(payload);
+    if (keys.length !== 2) {
+        throw new Error(`Updatable fields are: 'name' and 'quantity`);
+    }
 
     const containsKeysRequired: boolean = keys.every((key: string) => requiredKeys.includes(key));
     if (!containsKeysRequired) {
@@ -111,7 +114,7 @@ export const updateListItem = (req: Request, res: Response) => {
         if (!listFound) {
             return res.status(400).json({message: `List with id '${req.params.listId}' does not exist`})
         }
-        
+
         validateUpdateOrder(req.body);
 
         if (!!listFound) {
