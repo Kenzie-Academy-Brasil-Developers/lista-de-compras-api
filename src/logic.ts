@@ -67,7 +67,7 @@ export const createList = (req: Request, res: Response): Response => {
     }
 };
 
-export const saveLastCreatedList = (req: Request, res: Response, next: NextFunction): Response | void => {
+export const saveLastList = (req: Request, res: Response, next: NextFunction): Response | void => {
     req.lastList = internalData[internalData.length - 1] || {};
     return next();
 };
