@@ -105,19 +105,32 @@ const validateUpdateOrder = (payload: any) => {
     }
 };
 
-export const updateListItem = (req: Request, res: Response): Response => {
-    const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
-    validateUpdateOrder(req.body);
-
-    if (!!listFound) {
-        const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
-
-        if (!!itemFound) {
-            itemFound.name = req.body.name;
-            itemFound.quantity = req.body.quantity;
-            return res.status(200).json(itemFound);
+export const updateListItem = (req: Request, res: Response) => {
+    try {
+        const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
+        if (!listFound) {
+            return res.status(400).json({message: `List with id '${req.params.listId}' does not exist`})
         }
+        
+        validateUpdateOrder(req.body);
+
+        if (!!listFound) {
+            const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
+
+            if (!!itemFound) {
+                itemFound.name = req.body.name;
+                itemFound.quantity = req.body.quantity;
+                return res.status(200).json(itemFound);
+            } else {
+                return res.status(404).json({ message: `Item with name '${req.params.itemName}' does not exist` });
+            }
+        }
+
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.status(400).json({ message: err.message });
+        }
+        return res.status(500).json({ message: 'Internal server error' });
     }
 
-    return res.status(404).json({ message: `Item with name '${req.params.itemName}' does not exist` });
 };
