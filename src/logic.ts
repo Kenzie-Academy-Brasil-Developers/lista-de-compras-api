@@ -9,12 +9,12 @@ const validateDataOrder = (payload: any): IOrderListRequest => {
     const mainKeys: Array<string> = Object.keys(payload);
     const subKeys: Array<string> = [];
 
-    payload.data.forEach((product: Object) => subKeys.push(...Object.keys(product)));
-
     const containsMainRequired: boolean = mainKeys.every((key: string) => requiredMainKeys.includes(key));
     if (!containsMainRequired) {
         throw new Error(`Updatable fields are: 'listName' and 'data'`);
     }
+    
+    payload.data.forEach((product: Object) => subKeys.push(...Object.keys(product)));
 
     const containsSubRequired: boolean = subKeys.every((key: string) => requiredSubKeys.includes(key));
     if (!containsSubRequired) {
