@@ -120,7 +120,7 @@ const validateUpdateOrder = (payload: any) => {
     }
 };
 
-export const updateListItem = (req: Request, res: Response) => {
+export const updateListItem = (req: Request, res: Response): Response | void => {
     try {
         const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
         if (!listFound) {
