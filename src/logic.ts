@@ -37,10 +37,18 @@ const validateTypeValue = (payload: any) => {
     }
 };
 
+const countId = (): number => {
+    if (!internalData.length) {
+        return 1;
+    }
+
+    return internalData[internalData.length - 1].id + 1;
+};
+
 export const createList = (req: Request, res: Response): Response => {
     try {
         const orderData: IOrderListRequest = validateDataOrder(req.body);
-        const id: number = Math.floor(Math.random() * 1000);
+        const id: number = countId();
         validateTypeValue(req.body);
 
         const newOrderData: IOrderList = {
