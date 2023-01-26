@@ -13,7 +13,7 @@ const validateDataOrder = (payload: any): IOrderListRequest => {
     if (!containsMainRequired) {
         throw new Error(`Updatable fields are: 'listName' and 'data'`);
     }
-    
+
     payload.data.forEach((product: Object) => subKeys.push(...Object.keys(product)));
 
     const containsSubRequired: boolean = subKeys.every((key: string) => requiredSubKeys.includes(key));
@@ -24,10 +24,20 @@ const validateDataOrder = (payload: any): IOrderListRequest => {
     return payload;
 };
 
+const validateTypeValue = (payload: any) => {
+    const isExpected: boolean = payload.data.some((value: any) => typeof value.quantity !== 'string');
+    if (isExpected) {
+        throw new Error('The name and quantity need to be a string');
+    } else if (typeof payload.listName !== 'string') {
+        throw new Error('The list name need to be a string');
+    }
+};
+
 export const createList = (req: Request, res: Response): Response => {
     try {
         const orderData: IOrderListRequest = validateDataOrder(req.body);
         const id: number = Math.floor(Math.random() * 1000);
+        validateTypeValue(req.body);
 
         const newOrderData: IOrderList = {
             ...orderData,
