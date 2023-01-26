@@ -128,7 +128,9 @@ export const updateListItem = (req: Request, res: Response) => {
         }
 
         if (typeof req.body.name !== 'string' || typeof req.body.quantity !== 'string') {
-            return res.status(200).json({ message: 'The list name need to be a string' });
+            if (req.body.name && req.body.quantity) {
+                return res.status(200).json({ message: 'The list name need to be a string' });
+            }
         }
 
         validateUpdateOrder(req.body);
@@ -151,5 +153,4 @@ export const updateListItem = (req: Request, res: Response) => {
         }
         return res.status(500).json({ message: 'Internal server error' });
     }
-
 };
