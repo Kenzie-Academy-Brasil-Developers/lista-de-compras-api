@@ -18,24 +18,31 @@ const validateDataOrder = (payload: any): IOrderListRequest => {
 
     const containsSubRequired: boolean = subKeys.every((key: string) => requiredSubKeys.includes(key));
     if (!containsSubRequired) {
-        throw new Error(`Updatable fields are: 'name' and 'quantity'`)
+        throw new Error(`Updatable fields are: 'name' and 'quantity'`);
     }
 
     return payload;
 };
 
 export const createList = (req: Request, res: Response): Response => {
-    const orderData: IOrderListRequest = validateDataOrder(req.body);
-    const id: number = Math.floor(Math.random() * 1000);
+    try {
+        const orderData: IOrderListRequest = validateDataOrder(req.body);
+        const id: number = Math.floor(Math.random() * 1000);
 
-    const newOrderData: IOrderList = {
-        ...orderData,
-        id,
-    };
+        const newOrderData: IOrderList = {
+            ...orderData,
+            id,
+        };
 
-    internalData.push(newOrderData);
+        internalData.push(newOrderData);
 
-    return res.status(201).json(newOrderData);
+        return res.status(201).json(newOrderData);
+    } catch (err) {
+        if (err instanceof Error) {
+            return res.status(400).json({ message: err.message });
+        }
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 };
 
 export const getList = (req: Request, res: Response): Response => {
