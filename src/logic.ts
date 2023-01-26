@@ -95,8 +95,19 @@ export const deleteList = (req: Request, res: Response): Response => {
     return res.status(204).json();
 };
 
+const validateUpdateOrder = (payload: any) => {
+    const requiredKeys: Array<string> = ['name', 'quantity'];
+    const keys: Array<string> = Object.keys(payload);
+
+    const containsKeysRequired: boolean = keys.every((key: string) => requiredKeys.includes(key));
+    if (!containsKeysRequired) {
+        throw new Error(`Updatable fields are: 'name' and 'quantity`);
+    }
+};
+
 export const updateListItem = (req: Request, res: Response): Response => {
     const listFound: IOrderList | undefined = internalData.find((elem) => elem.id === +req.params.listId);
+    validateUpdateOrder(req.body);
 
     if (!!listFound) {
         const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
