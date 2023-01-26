@@ -132,13 +132,12 @@ export const updateListItem = (req: Request, res: Response) => {
                 return res.status(200).json({ message: 'The list name need to be a string' });
             }
         }
-
-        validateUpdateOrder(req.body);
-
+        
         if (!!listFound) {
             const itemFound = listFound.data.find((value) => value.name === req.params.itemName);
-
+            
             if (!!itemFound) {
+                validateUpdateOrder(req.body);
                 itemFound.name = req.body.name;
                 itemFound.quantity = req.body.quantity;
                 return res.status(200).json(itemFound);
