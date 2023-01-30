@@ -1,11 +1,10 @@
 import express, { Application } from 'express';
 
-import { createList, deleteList, deleteListItem, getList, getListById, saveLastList, updateListItem } from './logic';
+import { createList, deleteList, deleteListItem, getList, getListById, updateListItem } from './logic';
 import { iValidListId } from './middlewares';
 
 const app: Application = express();
 app.use(express.json());
-app.use('/purchaseList', saveLastList);
 
 app.post('/purchaseList', createList);
 app.get('/purchaseList', getList);

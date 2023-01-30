@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import { internalData } from './database';
 import { IOrderList, IOrderListRequest } from './interfaces';
@@ -65,11 +65,6 @@ export const createList = (req: Request, res: Response): Response => {
         }
         return res.status(500).json({ message: 'Internal server error' });
     }
-};
-
-export const saveLastList = (req: Request, res: Response, next: NextFunction): Response | void => {
-    req.lastList = internalData[internalData.length - 1] || {};
-    return next();
 };
 
 export const getList = (req: Request, res: Response): Response => {
